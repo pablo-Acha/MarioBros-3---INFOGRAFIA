@@ -21,12 +21,13 @@ class Game(arcade.Window):
     
 
     def setPersonaje(self):
-        return Player(path_or_texture="assets/images/mario.png",center_x=10,center_y=100)
+        return Player(path_or_texture="assets/images/mario.png",scale = 3,center_x=10,center_y=160)
 
     def on_draw(self):
         self.clear()
         if self.escena:
             self.escena.on_draw()
+            arcade.draw_sprite(self.personaje)
             self.personaje.draw()
 
     def on_key_press(self, key, modifiers):  
