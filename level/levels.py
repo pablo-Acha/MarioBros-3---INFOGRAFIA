@@ -18,8 +18,6 @@ class Level(arcade.View):
         self.plataformas =[]
         self.enemigos = []
         #metros recorridos
-        self.metros = 0
-
 
         #control del salto
         self.salto_presionado = False
@@ -29,7 +27,7 @@ class Level(arcade.View):
         self.personaje = personaje
         self.space = pymunk.Space()
         self.space.gravity = (0, -900)
-        self.space.add(personaje.body,personaje.hide_box,personaje.bottom_segment,personaje.top_segment)
+        self.space.add(personaje.body,personaje.hide_box)
 
     def on_draw(self):
         self.clear()
@@ -45,6 +43,7 @@ class Level(arcade.View):
             else:
                 self.personaje.stop()
         elif key == arcade.key.RIGHT:
+            self.personaje.cambiar_frame_derecha(0,True)
             self.derecha_presionado = False
             if self.izquierda_presionado:
                 self.personaje.mover_izquierda()
@@ -56,12 +55,18 @@ class Level(arcade.View):
 
     def key_press(self, key, modifiers):
         if key == arcade.key.LEFT:
+            self.personaje.direccion_d = False
+            self.personaje.direccion_i = True
             self.izquierda_presionado = True
         elif key == arcade.key.RIGHT :                
+            self.personaje.direccion_d = True
+            self.personaje.direccion_i = False
             self.derecha_presionado = True
         elif key == arcade.key.X and self.tiempo_transcurrido_salto == 0 and self.check_colision_bottom():
+            self.personaje.cambiar_frame_salto()
             self.salto_presionado = True            
             self.tiempo_transcurrido_salto = 0.0001 
+            self.personaje.pisando = False
 
     def update(self,delta_time):
         self.space.step(delta_time)
@@ -77,25 +82,35 @@ class Level(arcade.View):
         if self.tiempo_transcurrido_salto > 0.2 and not self.salto_presionado:
             self.tiempo_transcurrido_salto = 0
 
+    
+
+
     def boton_presionado(self,delt_time):
+
         if self.izquierda_presionado:
+            if self.check_colision_bottom():
+                self.personaje.pisando = True
+                self.personaje.cambiar_frame_izquierda(1)
+            
             if self.personaje.center_x>=150:
                 self.personaje.mover_izquierda()
             else:
                 self.fondo.center_x +=5
-        
         if self.derecha_presionado:
+            if self.check_colision_bottom():
+                self.personaje.pisando = True
+                self.personaje.cambiar_frame_derecha(1)
+            
             if self.personaje.center_x<=700:
                 self.personaje.mover_derecha()
             else:
                 self.fondo.center_x -=5
-            ##self.fondo.center_x = 1000
 
 
     def check_colision_bottom(self):
-        colisiones = self.space.shape_query(self.personaje.bottom_segment)
+        colisiones = self.space.shape_query(self.personaje.hide_box)
         for col in colisiones:
-            # col.shape es el shape con el que colisionó
             if col.shape != self.personaje.hide_box:
-                return True
+                if col.shape.body == self.piso_body:
+                    return True
         return False

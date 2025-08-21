@@ -13,7 +13,7 @@ class Level1(Level):
         #codigo temporal 
         self.piso_body  = self.space.static_body
         # Piso principal
-        self.piso = pymunk.Segment(self.piso_body,(-50,150),(WIDTH+50,150),10)
+        self.piso = pymunk.Segment(self.piso_body,(-50,100),(WIDTH+50,100),50)
 
         # =======================
         # MUROS EXTRA
@@ -70,53 +70,56 @@ class Level1(Level):
 # ANIMACIÓN DE MARIO: CAMINATA Y SALTO
 # ==================================================
 
-class Mario(arcade.Sprite):
-    def __init__(self):
-        # Textura inicial (parado)
-        super().__init__("assets/images/Mario/Mario base D.png", scale=2.5)
+# class Mario(arcade.Sprite):
+#     def __init__(self):
+#         # Textura inicial (parado)
+#         super().__init__("assets/images/Mario/Mario base D.png", scale=2.5)
 
-        # Estado
-        self.facing_right = True
-        self.is_jumping = False
-        self._anim_index = 0
-        self._anim_timer = 0.0
+#         # Estado
+#         self.facing_right = True
+#         self.is_jumping = False
+#         self._anim_index = 0
+#         self._anim_timer = 0.0
 
-        # Cargar texturas de idle
-        self.idle_right = arcade.load_texture("assets/images/Mario/Mario base D.png")
-        self.idle_left = arcade.load_texture("assets/images/Mario/Mario base I.png", flipped_horizontally=True)
+#         # Cargar texturas de idle
+#         self.idle_right = arcade.load_texture("assets/images/Mario/Mario base D.png")
+#         self.idle_left = arcade.load_texture("assets/images/Mario/Mario base I.png", flipped_horizontally=True)
 
-        # Cargar texturas de caminar
-        self.walk_right = [arcade.load_texture(f"assets/images/Mario/Mario base 2 D{i}.png") for i in range(1,4)]
-        self.walk_left = [arcade.load_texture(f"assets/images/Mario/Mario base 2 I{i}.png", flipped_horizontally=True) for i in range(1,4)]
+#         # Cargar texturas de caminar
+#         self.walk_right = [arcade.load_texture(f"assets/images/Mario/Mario base 2 D{i}.png") for i in range(1,4)]
+#         self.walk_left = [arcade.load_texture(f"assets/images/Mario/Mario base 2 I{i}.png", flipped_horizontally=True) for i in range(1,4)]
 
-        # Cargar texturas de salto
-        self.jump_right = arcade.load_texture("assets/images/Mario/Mario base salto.png")
-        self.jump_left = arcade.load_texture("assets/images/Mario/Marios base salto.png", flipped_horizontally=True)
+#         # Cargar texturas de salto
+#         self.jump_right = arcade.load_texture("assets/images/Mario/Mario base salto.png")
+#         self.jump_left = arcade.load_texture("assets/images/Mario/Marios base salto.png", flipped_horizontally=True)
 
-    def update_animation(self, delta_time: float = 1/60):
-        # Orientación
-        if self.change_x > 0:
-            self.facing_right = True
-        elif self.change_x < 0:
-            self.facing_right = False
 
-        # Animación de salto
-        if self.is_jumping:
-            self.texture = self.jump_right if self.facing_right else self.jump_left
-            return
 
-        # Animación idle si no se mueve
-        if abs(self.change_x) < 0.1:
-            self.texture = self.idle_right if self.facing_right else self.idle_left
-            return
 
-        # Animación de caminar
-        self._anim_timer += delta_time
-        if self._anim_timer >= 0.12:
-            self._anim_timer = 0
-            self._anim_index = (self._anim_index + 1) % len(self.walk_right)
+#     def update_animation(self, delta_time: float = 1/60):
+#         # Orientación
+#         if self.change_x > 0:
+#             self.facing_right = True
+#         elif self.change_x < 0:
+#             self.facing_right = False
 
-        if self.facing_right:
-            self.texture = self.walk_right[self._anim_index]
-        else:
-            self.texture = self.walk_left[self._anim_index]
+#         # Animación de salto
+#         if self.is_jumping:
+#             self.texture = self.jump_right if self.facing_right else self.jump_left
+#             return
+
+#         # Animación idle si no se mueve
+#         if abs(self.change_x) < 0.1:
+#             self.texture = self.idle_right if self.facing_right else self.idle_left
+#             return
+
+#         # Animación de caminar
+#         self._anim_timer += delta_time
+#         if self._anim_timer >= 0.12:
+#             self._anim_timer = 0
+#             self._anim_index = (self._anim_index + 1) % len(self.walk_right)
+
+#         if self.facing_right:
+#             self.texture = self.walk_right[self._anim_index]
+#         else:
+#             self.texture = self.walk_left[self._anim_index]
