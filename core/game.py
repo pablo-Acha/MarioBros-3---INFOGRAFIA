@@ -11,63 +11,30 @@ class Game(arcade.Window):
         self.escena = None
         self.esta_en_menu = False 
         self.esta_en_nivel = True  
-        self.izquierda_presionado = False
-        self.derecha_presionado = False
         self.setup()
 
     def setup(self):
         self.personaje = self.setPersonaje() 
-        self.escena = Level1("level_1_1")  
+        self.escena = Level1(extension_imagen = "png",personaje = self.personaje)  
     
 
     def setPersonaje(self):
-        return Player(path_or_texture="assets/images/mario.png",scale = 3,center_x=10,center_y=160)
+        return Player(path_or_texture="assets/images/mario.png",scale = 3,center_x=200,center_y=500)
 
     def on_draw(self):
         self.clear()
         if self.escena:
             self.escena.on_draw()
-            arcade.draw_sprite(self.personaje)
-            self.personaje.draw()
 
     def on_key_press(self, key, modifiers):  
         if self.esta_en_nivel:
-            if key == arcade.key.LEFT:
-                self.izquierda_presionado = True
-            if key == arcade.key.RIGHT :                
-                self.derecha_presionado = True
-
-
-
+            self.escena.key_press(key,modifiers)
 
     def on_key_release(self, key, modifiers):
         if self.esta_en_nivel:
-            if key == arcade.key.LEFT:
-                self.izquierda_presionado = False
-                if self.derecha_presionado:
-                    self.personaje.mover_derecha()
-                else:
-                    self.personaje.stop()
-            elif key == arcade.key.RIGHT:
-                self.derecha_presionado = False
-                if self.izquierda_presionado:
-                    self.personaje.mover_izquierda()
-                else:
-                    self.personaje.stop()
-
-
+            self.escena.key_release(key,modifiers)
 
 
     def on_update(self, delta_time):
         if self.escena:
-            # self.escena.on_update(delta_time)
-            self.personaje.update()
-            self.boton_presionado(delta_time)
-            
-
-    def boton_presionado(self,delt_time):
-        if self.izquierda_presionado:
-            self.personaje.mover_izquierda()
-        
-        if self.derecha_presionado:
-            self.personaje.mover_derecha()
+            self.escena.update(delta_time)
