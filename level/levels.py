@@ -85,7 +85,7 @@ class Level(arcade.View):
                 self.fondo.center_x +=5
         
         if self.derecha_presionado:
-            if self.personaje.center_x<=400:
+            if self.personaje.center_x<=700:
                 self.personaje.mover_derecha()
             else:
                 self.fondo.center_x -=5
