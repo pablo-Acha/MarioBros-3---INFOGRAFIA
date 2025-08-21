@@ -1,6 +1,0 @@
-# Entornos virtuales de Python (uv y otros)
-.venv/
-
-# Archivos de entorno (environment variables)
-.env
-.secrets
