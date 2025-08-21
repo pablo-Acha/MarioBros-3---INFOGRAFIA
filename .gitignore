@@ -1,0 +1,52 @@
+# Entornos virtuales de Python (uv y otros)
+.venv/
+venv/
+env/
+ENV/
+
+# Archivos de caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Instalaciones de uv
+.uv/
+
+# Archivos de coverage
+.coverage
+.coverage.*
+htmlcov/
+
+# Archivos de testing
+.pytest_cache/
+.tox/
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# Archivos de distribución
+dist/
+build/
+*.egg-info/
+
+# Archivos de base de datos (si usas SQLite)
+*.sqlite3
+*.db
+
+# Archivos de entorno (environment variables)
+.env
+.secrets

@@ -37,7 +37,4 @@ class Level1(Level):
 
     def update(self, delta_time):
         super().update(delta_time)
-        if self.fondo.left <= -500:
-            pass 
-        if self.fondo.left <= -1000:
-            pass
+       
