@@ -20,7 +20,7 @@ class Player(arcade.Sprite):
             arcade.load_texture("assets/images/Mario/Mario base I.png"),
             arcade.load_texture("assets/images/Mario/Mario base 2 I.png"),
             arcade.load_texture("assets/images/Mario/Mario base salto D.png"),
-            arcade.load_texture("assets/images/Mario/Mario base salto D.png"),
+            arcade.load_texture("assets/images/Mario/Mario base salto I.png"),
         ]
         # Configuración del cuerpo principal en pymunk
         self.body = pymunk.Body(mass=80, moment=800)    
