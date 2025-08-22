@@ -10,7 +10,7 @@ class Player(arcade.Sprite):
         self.change_y = 0
         self.direccion_d = True
         self.direccion_i = False
-        self.pisando = True
+        self.pisando = False
         self.frame_i = 0; 
         self.frame_d = 0; 
 
@@ -23,23 +23,14 @@ class Player(arcade.Sprite):
             arcade.load_texture("assets/images/Mario/Mario base salto I.png"),
         ]
         # Configuración del cuerpo principal en pymunk
-        self.body = pymunk.Body(mass=80, moment=800)    
+        self.body = pymunk.Body(mass=100,moment=1000)    
         self.body.position = center_x, center_y 
-
+        self.body.elasticity = 0.0
+        self.body.friction = 1.0
         # Shape principal
-        self.hide_box = pymunk.Poly.create_box(self.body, size=(30, 60))
-        self.hide_box.elasticity = 0.2
-        self.hide_box.friction = 0.5
-
-        # # Segmento superior (en el MISMO body)
-        # self.top_segment = pymunk.Segment(self.body, (-15, 30), (15, 30), 2)
-        # self.top_segment.elasticity = 0.3
-        # self.top_segment.friction = 0.7
-
-        # # Segmento inferior (en el MISMO body)  
-        # self.bottom_segment = pymunk.Segment(self.body, (-15, -30), (15, -30), 2)
-        # self.bottom_segment.elasticity = 0.1
-        # self.bottom_segment.friction = 1.0
+        self.hide_box = pymunk.Poly.create_box(self.body, size=(30, 50))
+        # self.hide_box.elasticity = 0.2
+        # self.hide_box.friction = 0.5
 
     def cambiar_frame_salto(self,frame = 1):
         if self.direccion_d:
@@ -48,8 +39,7 @@ class Player(arcade.Sprite):
             self.texture = self.textures[5]
                 
 
-    def cambiar_frame_derecha(self,frame = 1,forzar = False):
-        
+    def cambiar_frame_derecha(self,frame = 1,forzar = False):        
         if not self.pisando:
             self.cambiar_frame_salto()
         elif not forzar:
@@ -77,21 +67,25 @@ class Player(arcade.Sprite):
 
 
     def draw(self):         
-        # super().draw()
         arcade.draw_sprite(self)
-        arcade.draw_polygon_outline([(self.center_x+15,self.center_y+15),(self.center_x-15,self.center_y+15)
-                                     ,(self.center_x-15,self.center_y-15),(self.center_x+15,self.center_y-15)],arcade.color.RED)    
-
+        arcade.draw_polygon_outline([(self.center_x+15,self.center_y+25),(self.center_x-15,self.center_y+25)
+                                     ,(self.center_x-15,self.center_y-25),(self.center_x+15,self.center_y-25)],arcade.color.RED)    
+        if not self.pisando:
+            self.cambiar_frame_salto()
+        
     def update(self, delta_time = 1 / 60):
         self.center_x = self.body.position.x
         self.center_y = self.body.position.y
+        print(self.body.velocity.y)
+        if self.body.velocity.y < -900:
+            self.body.velocity = (self.body.velocity.x,-900)
 
+            
 
 
     def jump(self):
-        self.body.velocity = (self.body.velocity.x, 300)
+        self.body.velocity = (self.body.velocity.x, 600)
         self.pisando = False
-        self.cambiar_frame_salto()
 
     def mover_izquierda(self):
         self.body.velocity = (-200, self.body.velocity.y)
@@ -99,5 +93,7 @@ class Player(arcade.Sprite):
     def mover_derecha(self):
         self.body.velocity = (200, self.body.velocity.y)
 
+
     def stop(self):
         self.body.velocity = (0, self.body.velocity.y)
+        

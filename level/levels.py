@@ -15,25 +15,26 @@ class Level(arcade.View):
         self.fondo.left = left
         self.fondo.center_y = center_y
         
+        self.piso_body  = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
+        self.piso_body.position = (0,0)
+        self.piso_body.elasticity = 0.0
+        self.piso_body.friction = 1.0
+
         self.plataformas =[]
         self.enemigos = []
-        #metros recorridos
-
-        #control del salto
         self.salto_presionado = False
         self.tiempo_transcurrido_salto = 0
         self.tiempo_presionando_salto = 0
 
         self.personaje = personaje
         self.space = pymunk.Space()
-        self.space.gravity = (0, -900)
+        self.space.gravity = (0, -1500)
         self.space.add(personaje.body,personaje.hide_box)
 
     def on_draw(self):
         self.clear()
         arcade.draw_sprite(self.fondo) 
         self.personaje.draw()
-        # arcade.draw_sprite(self.personaje)
 
     def key_release(self,key,modifiers):
         if key == arcade.key.LEFT:
@@ -63,7 +64,7 @@ class Level(arcade.View):
             self.personaje.direccion_i = False
             self.derecha_presionado = True
         elif key == arcade.key.X and self.tiempo_transcurrido_salto == 0 and self.check_colision_bottom():
-            self.personaje.cambiar_frame_salto()
+            self.personaje.jump()
             self.salto_presionado = True            
             self.tiempo_transcurrido_salto = 0.0001 
             self.personaje.pisando = False
@@ -72,14 +73,14 @@ class Level(arcade.View):
         self.space.step(delta_time)
         self.personaje.update()
         self.boton_presionado(delta_time)
-        if self.tiempo_transcurrido_salto>0 and self.tiempo_transcurrido_salto < 0.2:
+        if self.tiempo_transcurrido_salto>0 and self.tiempo_transcurrido_salto < 0.05:
             self.personaje.jump()
             self.tiempo_transcurrido_salto+= delta_time
-        elif self.tiempo_transcurrido_salto > 0.2 and self.salto_presionado and self.tiempo_transcurrido_salto < 0.5:
+        elif self.tiempo_transcurrido_salto > 0.05 and self.salto_presionado and self.tiempo_transcurrido_salto < 0.1:
             self.personaje.jump()
             self.tiempo_transcurrido_salto += delta_time
-        print(self.tiempo_transcurrido_salto)
-        if self.tiempo_transcurrido_salto > 0.2 and not self.salto_presionado:
+        # print(self.tiempo_transcurrido_salto)
+        if self.tiempo_transcurrido_salto > 0.05 and not self.salto_presionado:
             self.tiempo_transcurrido_salto = 0
 
     
@@ -95,7 +96,9 @@ class Level(arcade.View):
             if self.personaje.center_x>=150:
                 self.personaje.mover_izquierda()
             else:
+                self.personaje.body.velocity = (0,self.personaje.body.velocity.y)
                 self.fondo.center_x +=5
+                self.mover_plataformas(self.fondo.left)
         if self.derecha_presionado:
             if self.check_colision_bottom():
                 self.personaje.pisando = True
@@ -105,7 +108,8 @@ class Level(arcade.View):
                 self.personaje.mover_derecha()
             else:
                 self.fondo.center_x -=5
-
+                self.personaje.body.velocity = (0,self.personaje.body.velocity.y)
+                self.mover_plataformas(self.fondo.left)
 
     def check_colision_bottom(self):
         colisiones = self.space.shape_query(self.personaje.hide_box)
@@ -114,3 +118,12 @@ class Level(arcade.View):
                 if col.shape.body == self.piso_body:
                     return True
         return False
+
+
+    def evitar_desborde(self):
+        pass
+
+
+    def mover_plataformas(self):
+        #plataforma
+        pass
