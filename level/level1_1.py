@@ -73,8 +73,11 @@ class Level1(Level):
 
 
     def update(self, delta_time):
-        self.chunk.update_todo()
-        # self.evitar_desborde()
+        self.chunk.update_todo(self.fondo.left)
+        if self.fondo.left <-1000:
+            self.chunk.eliminar_todo(self.space)
+        
+        
         super().update(delta_time)
 
     def mover_plataformas(self, dx):

@@ -12,7 +12,15 @@ class Chunk():
         self.lista_todo = []
 
     def eliminar_todo(self,space):
-        space.remove()
+        if len(self.lista_bloques)>0:
+            for bloques in self.lista_bloques:
+                space.remove(bloques.body_bloque,bloques.bloque_box)
+            self.lista_bloques = []
+
+        if len(self.lista_plataformas)>0:
+            for plataforma in self.lista_plataformas:
+                space.remove(plataforma)
+            self.lista_plataformas = []
 
     def agregar_todo(self,space):
         pass

@@ -3,6 +3,7 @@ import pymunk
 from configuraciones import WIDTH, HEIGHT, TITLE
 import arcade
 from entities.bloques import Bloques
+from entities.Gumba import Gumba
 
 
 class Primer_Chunk(Chunk):
@@ -13,6 +14,7 @@ class Primer_Chunk(Chunk):
     def agregar_todo(self, space,body_piso):
         self.agregar_bloques(space)
         self.agregar_plataformas(space,body_piso)
+        self.agregar_enemigos(space)
 
     def agregar_bloques(self, space):
         self.lista_bloques = [
@@ -38,15 +40,24 @@ class Primer_Chunk(Chunk):
 
     
     def agregar_enemigos(self, space):
-        return super().agregar_enemigos(space)
+        self.lista_enemigos = [
+            Gumba(center_x=550,center_y=225)            
+        ]
+        for enemigo in self.lista_enemigos:
+            space.add(enemigo.body_gumba,enemigo.gumba_box)
     
-    def update_todo(self):
+    def update_todo(self,fondo):
         for bloque in self.lista_bloques:
             bloque.update()
+
+        for enemigo in self.lista_enemigos:
+            enemigo.update(fondo)
 
     def draw_todo(self):
         for bloque in self.lista_bloques:
             bloque.draw()
+        for enemigo in self.lista_enemigos:
+            enemigo.draw()
 
     def mover_todo(self,pivot_fondo,piso_body):
         x,y = piso_body.position 
@@ -54,3 +65,11 @@ class Primer_Chunk(Chunk):
         for bloque in self.lista_bloques:
             xb,yb = bloque.body_bloque.position
             bloque.body_bloque.position = (self.pivot_x+pivot_fondo+bloque.original_x,yb)
+        for enemigo in self.lista_enemigos:
+            xb,yb = enemigo.body_gumba.position
+            # enemigo.original_x = xb
+            a =xb + pivot_fondo-enemigo.fondo_x 
+            enemigo.body_gumba.position = (
+               a,
+               yb
+            )
