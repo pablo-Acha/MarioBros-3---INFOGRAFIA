@@ -8,16 +8,19 @@ class Bloques(arcade.Sprite):
         self.frame = 0
         self.vacio = False
         self.body_bloque = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
-        self.body_bloque.position = center_x, center_y 
+        self.body_bloque.position = center_x, center_y-22
         self.original_x = center_x
-        self.original_y = center_y
-        self.bloque_box = pymunk.Poly.create_box(self.body_bloque, size=(30, 50))
+        self.original_y = center_y-22
+        self.bloque_box = pymunk.Poly.create_box(self.body_bloque, size=(40, 22))
+        self.linea_costado_iz = pymunk.Segment(self.body_bloque, (center_x-20,center_y+22), (center_x-20,center_y-22), 10)
+        self.linea_costado_der = pymunk.Segment(self.body_bloque, (center_x+10,center_y+22), (center_x+10,center_y-22), 10)
         self.textures = [
             arcade.load_texture("assets/images/Items/bloque item 1.png"),
             arcade.load_texture("assets/images/Items/bloque item 2.png"),
             arcade.load_texture("assets/images/Items/bloque item 3.png"),
             arcade.load_texture("assets/images/Items/bloque item vacio.png")
         ]
+        self.lista_shapes = [self.bloque_box,self.linea_costado_iz,self.linea_costado_der]
 
     def soltar_objeto(self):
         if not self.vacio:
@@ -26,9 +29,16 @@ class Bloques(arcade.Sprite):
 
     def draw(self):
         arcade.draw_sprite(self)
+        x,y = self.body_bloque.position
+        y+=22
+        arcade.draw_polygon_outline([(x-20,y+22),(20+x,y+22)
+                             ,(x+20,y-22),(x-20,y-22)],arcade.color.BLACK)    
+        arcade.draw_line(x-20,y+22, x-20,y-22,arcade.color.BLUE,10)               # plataforma 1
+
     
-    def update(self):
-        self.center_x,self.center_y = self.body_bloque.position
+    def update(self,space,personaje_shape):
+        self.salto(space,personaje_shape)
+        self.center_x,self.center_y = self.body_bloque.position.x,self.body_bloque.position.y+22
         if self.vacio:
             self.texture = self.textures[3]
         else:
@@ -40,3 +50,12 @@ class Bloques(arcade.Sprite):
             else:
                 self.texture = self.textures[1]
 
+    def salto(self,space,personaje_shape):
+        # verificar colision con perosonaje si existe cambie a estado vacio
+        if not self.vacio:
+            colisiones = space.shape_query(self.bloque_box)
+            for col in colisiones:
+                if col.shape == personaje_shape:
+                    self.vacio = True
+
+        

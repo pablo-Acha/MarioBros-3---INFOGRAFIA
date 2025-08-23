@@ -28,8 +28,8 @@ class Gumba(arcade.Sprite):
     
     def update(self,fondo_pos_x):
         self.fondo_x = fondo_pos_x
-        if self.body_gumba.position.y <150:
-            self.body_gumba.position = (self.body_gumba.position.x,150)
+        # if self.body_gumba.position.y <150:
+        #     self.body_gumba.position = (self.body_gumba.position.x,150)
         self.center_x,self.center_y = self.body_gumba.position
         self.frame=(self.frame+1)%30
         if self.frame<15:

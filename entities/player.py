@@ -74,8 +74,8 @@ class Player(arcade.Sprite):
             self.cambiar_frame_salto()
         
     def update(self, delta_time = 1 / 60):
-        if self.body.position.y <150:
-            self.body.position = (self.body.position.x,150)
+        # if self.body.position.y <150:
+        #     self.body.position = (self.body.position.x,150)
         self.center_x = self.body.position.x
         self.center_y = self.body.position.y
         print(self.body.velocity.y)
@@ -99,3 +99,4 @@ class Player(arcade.Sprite):
     def stop(self):
         self.body.velocity = (0, self.body.velocity.y)
         
+

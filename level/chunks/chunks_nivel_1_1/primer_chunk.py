@@ -24,17 +24,17 @@ class Primer_Chunk(Chunk):
             Bloques(center_x = 745,center_y= 455)
         ]
         for bloque in self.lista_bloques:
-            space.add(bloque.body_bloque,bloque.bloque_box)
+            space.add(bloque.body_bloque,*bloque.lista_shapes)
 
     
     def agregar_plataformas(self, space,piso_body):
         self.lista_plataformas  = [
             pymunk.Segment(piso_body,(-50,100),(WIDTH+500,100),50),
-            pymunk.Segment(piso_body, (720,280), (860,280), 5),
-            pymunk.Segment(piso_body, (530,280), (625,280), 5),
-            pymunk.Segment(piso_body, (530,330), (625,330), 5),
-            pymunk.Segment(piso_body, (675,425), (765,425), 5),
-            pymunk.Segment(piso_body, (675,475), (765,475), 5),
+            pymunk.Segment(piso_body, (720,280), (860,280), 10),
+            # pymunk.Segment(piso_body, (530,280), (625,280), 5),
+            pymunk.Segment(piso_body, (530,330), (625,330), 10),
+            # pymunk.Segment(piso_body, (675,425), (765,425), 5),
+            pymunk.Segment(piso_body, (675,475), (765,475), 10),
         ]
         space.add(piso_body,*self.lista_plataformas)
 
@@ -46,9 +46,9 @@ class Primer_Chunk(Chunk):
         for enemigo in self.lista_enemigos:
             space.add(enemigo.body_gumba,enemigo.gumba_box)
     
-    def update_todo(self,fondo):
+    def update_todo(self,fondo,space,personaje_hide_box):
         for bloque in self.lista_bloques:
-            bloque.update()
+            bloque.update(space,personaje_hide_box)
 
         for enemigo in self.lista_enemigos:
             enemigo.update(fondo)

@@ -52,14 +52,14 @@ class Level1(Level):
     def on_draw(self):
         super().on_draw()    
         
-        # for i in range(0,800,20):
-            # arcade.draw_line(0,i,WIDTH,i,arcade.color.ROSE,2)              
-        # for i in range(0,WIDTH,20):
-            # arcade.draw_line(i,0,i,HEIGHT,arcade.color.ROSE,2)             
-        # for i in range(0,800,100):
-            # arcade.draw_line(0,i,WIDTH,i,arcade.color.BLACK,3)             
-        # for i in range(0,WIDTH,100):
-            # arcade.draw_line(i,0,i,HEIGHT,arcade.color.BLACK,3)            
+        for i in range(0,800,20):
+            arcade.draw_line(0,i,WIDTH,i,arcade.color.ROSE,2)              
+        for i in range(0,WIDTH,20):
+            arcade.draw_line(i,0,i,HEIGHT,arcade.color.ROSE,2)             
+        for i in range(0,800,100):
+            arcade.draw_line(0,i,WIDTH,i,arcade.color.BLACK,3)             
+        for i in range(0,WIDTH,100):
+            arcade.draw_line(i,0,i,HEIGHT,arcade.color.BLACK,3)            
         self.chunk.draw_todo()
         # Piso
         arcade.draw_polygon_outline([(-50,150),(WIDTH+50,150)
@@ -73,7 +73,7 @@ class Level1(Level):
 
 
     def update(self, delta_time):
-        self.chunk.update_todo(self.fondo.left)
+        self.chunk.update_todo(self.fondo.left,self.space, self.personaje.hide_box)
         if self.fondo.left <-1000:
             self.chunk.eliminar_todo(self.space)
         

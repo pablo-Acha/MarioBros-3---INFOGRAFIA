@@ -73,6 +73,7 @@ class Level(arcade.View):
         self.space.step(delta_time)
         self.personaje.update()
         self.boton_presionado(delta_time)
+        self.check_colision_bottom()
         if self.tiempo_transcurrido_salto>0 and self.tiempo_transcurrido_salto < 0.05:
             self.personaje.jump()
             self.tiempo_transcurrido_salto+= delta_time
@@ -116,6 +117,11 @@ class Level(arcade.View):
         for col in colisiones:
             if col.shape != self.personaje.hide_box:
                 if col.shape.body == self.piso_body:
+                    x,y = self.personaje.body.velocity
+                    if abs(y) > 0:
+                        self.personaje.body.velocity = (self.personaje.body.velocity.x, 1)
+                        # print("yes")
+                        # self.personaje.position = (self.personaje.position.x, col.shape.body.position.y+20)
                     return True
         return False
 
