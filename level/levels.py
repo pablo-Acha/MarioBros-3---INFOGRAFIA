@@ -126,6 +126,8 @@ class Level(arcade.View):
         return False
 
 
+
+
     def evitar_desborde(self):
         pass
 

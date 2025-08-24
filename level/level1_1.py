@@ -30,7 +30,7 @@ class Level1(Level):
         # self.plataforma_4 = pymunk.Segment(self.piso_body, (530,425), (625,425), 5)
         # self.plataforma_5 = pymunk.Segment(self.piso_body, (530,475), (625,475), 5)
 
-        self.chunk = Primer_Chunk(0)
+        self.chunk = Primer_Chunk(0,self.personaje,self.space)
         self.chunk.agregar_todo(self.space,self.piso_body)
         #añadri bloque
         # self.bloque = Bloques(center_x = 550,center_y= 310)
@@ -52,29 +52,29 @@ class Level1(Level):
     def on_draw(self):
         super().on_draw()    
         
-        for i in range(0,800,20):
-            arcade.draw_line(0,i,WIDTH,i,arcade.color.ROSE,2)              
-        for i in range(0,WIDTH,20):
-            arcade.draw_line(i,0,i,HEIGHT,arcade.color.ROSE,2)             
-        for i in range(0,800,100):
-            arcade.draw_line(0,i,WIDTH,i,arcade.color.BLACK,3)             
-        for i in range(0,WIDTH,100):
-            arcade.draw_line(i,0,i,HEIGHT,arcade.color.BLACK,3)            
+        # for i in range(0,800,20):
+            # arcade.draw_line(0,i,WIDTH,i,arcade.color.ROSE,2)              
+        # for i in range(0,WIDTH,20):
+            # arcade.draw_line(i,0,i,HEIGHT,arcade.color.ROSE,2)             
+        # for i in range(0,800,100):
+            # arcade.draw_line(0,i,WIDTH,i,arcade.color.BLACK,3)             
+        # for i in range(0,WIDTH,100):
+            # arcade.draw_line(i,0,i,HEIGHT,arcade.color.BLACK,3)            
         self.chunk.draw_todo()
         # Piso
-        arcade.draw_polygon_outline([(-50,150),(WIDTH+50,150)
-                             ,(WIDTH+50,100),(-50,100)],arcade.color.BLACK)    
+        # arcade.draw_polygon_outline([(-50,150),(WIDTH+50,150)
+                            #  ,(WIDTH+50,100),(-50,100)],arcade.color.BLACK)    
 
-        arcade.draw_line(720,280,860,280,arcade.color.BLUE,3)               # plataforma 1
-        arcade.draw_line(530,280,625,280,arcade.color.GREEN,3)              # plataforma 2
-        arcade.draw_line(530,330,625,330,arcade.color.PURPLE,3)              # plataforma 3
-        arcade.draw_line(530,425,625,425,arcade.color.PURPLE,3)              # plataforma 4
-        arcade.draw_line(530,475,625,475,arcade.color.PURPLE,3)              # plataforma 5
+        # arcade.draw_line(720,280,860,280,arcade.color.BLUE,3)               # plataforma 1
+        # arcade.draw_line(530,280,625,280,arcade.color.GREEN,3)              # plataforma 2
+        # arcade.draw_line(530,330,625,330,arcade.color.PURPLE,3)              # plataforma 3
+        # arcade.draw_line(530,425,625,425,arcade.color.PURPLE,3)              # plataforma 4
+        # arcade.draw_line(530,475,625,475,arcade.color.PURPLE,3)              # plataforma 5
 
 
     def update(self, delta_time):
         self.chunk.update_todo(self.fondo.left,self.space, self.personaje.hide_box)
-        if self.fondo.left <-1000:
+        if self.fondo.left < -1000:
             self.chunk.eliminar_todo(self.space)
         
         
