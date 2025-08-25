@@ -4,6 +4,7 @@ from configuraciones import WIDTH, HEIGHT, TITLE
 import arcade
 from entities.bloques import Bloques
 from .chunks.chunks_nivel_1_1.primer_chunk import Primer_Chunk
+from .chunks.chunks_nivel_1_1.segundo_chunk import Segundo_Chunk
 
 class Level1(Level):
     def __init__(self, personaje, extension_imagen = "png",left=0, center_y=450):
@@ -29,9 +30,13 @@ class Level1(Level):
         # self.plataforma_3 = pymunk.Segment(self.piso_body, (530,330), (625,330), 5)
         # self.plataforma_4 = pymunk.Segment(self.piso_body, (530,425), (625,425), 5)
         # self.plataforma_5 = pymunk.Segment(self.piso_body, (530,475), (625,475), 5)
-
-        self.chunk = Primer_Chunk(0,self.personaje,self.space)
-        self.chunk.agregar_todo(self.space,self.piso_body)
+        self.primer_chunk = Primer_Chunk(0,self.personaje,self.space) 
+        self.segundo_chunk = Segundo_Chunk(1000,self.personaje,self.space) 
+        self.chunk = self.primer_chunk
+        self.chunk_b = self.segundo_chunk
+        self.chunk_anterior  = None
+        self.chunk.agregar_todo(self.space,self.piso_body,self.piso_body_flotante,self.paredes_body)
+        self.chunk_b.agregar_todo(self.space,self.piso_body,self.piso_body_flotante,self.paredes_body)
         #añadri bloque
         # self.bloque = Bloques(center_x = 550,center_y= 310)
         # self.bloque_1 = Bloques(center_x = 600,center_y= 310)
@@ -61,6 +66,7 @@ class Level1(Level):
         # for i in range(0,WIDTH,100):
             # arcade.draw_line(i,0,i,HEIGHT,arcade.color.BLACK,3)            
         self.chunk.draw_todo()
+        self.chunk_b.draw_todo()
         # Piso
         # arcade.draw_polygon_outline([(-50,150),(WIDTH+50,150)
                             #  ,(WIDTH+50,100),(-50,100)],arcade.color.BLACK)    
@@ -74,14 +80,20 @@ class Level1(Level):
 
     def update(self, delta_time):
         self.chunk.update_todo(self.fondo.left,self.space, self.personaje.hide_box)
-        if self.fondo.left < -1000:
-            self.chunk.eliminar_todo(self.space)
+        self.chunk_b.update_todo(self.fondo.left,self.space, self.personaje.hide_box)
+        self.piso_body.position = (self.fondo.left,self.piso_body.position.y)
+        self.piso_body_flotante.position = (self.fondo.left,self.piso_body_flotante.position.y)
+        self.paredes_body.position = (self.fondo.left,self.paredes_body.position.y)
+        
+        # if self.fondo.left < -2000:
+        #     self.chunk.eliminar_todo(self.space)
         
         
         super().update(delta_time)
 
     def mover_plataformas(self, dx):
         self.chunk.mover_todo(dx,self.piso_body)
+        self.chunk_b.mover_todo(dx,self.piso_body)
 
     # def evitar_desborde(self):
     #     for shape in self.chunk.lista_plataformas:

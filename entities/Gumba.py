@@ -23,10 +23,12 @@ class Gumba(arcade.Sprite):
             arcade.load_texture("assets/images/enemigos/cupa D.png"),
             arcade.load_texture("assets/images/enemigos/cupa pisado.png")
         ]
-        self.sensor_shape = pymunk.Poly.create_box(self.body_gumba, size=(15, 25))  # más pequeño y delgado
-        self.sensor_shape.sensor = True  # No afecta físicamente
-        self.sensor_shape.offset = (0, 35)  # 30 píxeles arriba del centro del body_gumba
-
+        self.sensor_shape = pymunk.Segment(self.body_gumba,(-15,25),(15,25),10)  # más pequeño y delgado
+        self.sensor_shape.sensor = True  
+        self.sensor_lados_iz = pymunk.Segment(self.body_gumba,(-20,-25),(-20,25),10)  # más pequeño y delgado
+        self.sensor_lados_iz.sensor = True  
+        self.sensor_lados_der = pymunk.Segment(self.body_gumba,(20,-25),(20,25),10)  # más pequeño y delgado
+        self.sensor_lados_der.sensor = True  
 
 
     def soltar_objeto(self):
@@ -56,11 +58,11 @@ class Gumba(arcade.Sprite):
 
 
     def derecha(self):
-        self.body.velocity = (+200, self.body.velocity.y)
+        self.body_gumba.velocity = (+20, self.body_gumba.velocity.y)
         
 
     def izquierda(self):
-        self.body.velocity = (-200, self.body.velocity.y)
+        self.body_gumba.velocity = (-20, self.body_gumba.velocity.y)
     
     def morir(self):
         self.vida = False
@@ -80,9 +82,14 @@ class Gumba(arcade.Sprite):
         if self.vida:
             self.space.add(self.body_gumba,self.gumba_box,self.sensor_shape)
             self.estar_en_espacio = True
+            self.izquierda()
+
     def borrar_del_espacio(self):
         if self.vida:
             if self.body_gumba.space is not None:
                 self.space.remove(self.body_gumba,self.gumba_box,self.sensor_shape)
                 self.estar_en_espacio = False
             
+
+    def bajar_personaje(self):
+        self.personaje.tam-=1

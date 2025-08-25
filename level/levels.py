@@ -12,13 +12,32 @@ class Level(arcade.View):
         self.izquierda_presionado = False
         self.derecha_presionado = False
         self.fondo = arcade.Sprite(f"./assets/images/levels/{nombre_imagen}.{extension_imagen}",scale=3)
-        self.fondo.left = left
+        self.fondo.left = 0
+
         self.fondo.center_y = center_y
+        
+        self.space = pymunk.Space()
+        self.space.gravity = (0, -1500)
         
         self.piso_body  = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
         self.piso_body.position = (0,0)
         self.piso_body.elasticity = 0.0
         self.piso_body.friction = 1.0
+        self.space.add(self.piso_body)
+
+
+        self.piso_body_flotante  = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
+        self.piso_body_flotante.position = (0,0)
+        self.piso_body_flotante.elasticity = 0.0
+        self.piso_body_flotante.friction = 1.0
+        self.space.add(self.piso_body_flotante)
+
+
+        self.paredes_body  = pymunk.Body(body_type=pymunk.Body.KINEMATIC)
+        self.paredes_body.position = (0,0)
+        self.paredes_body.elasticity = 0.0
+        self.paredes_body.friction = 1.0
+        self.space.add(self.paredes_body)
 
         self.plataformas =[]
         self.enemigos = []
@@ -27,8 +46,6 @@ class Level(arcade.View):
         self.tiempo_presionando_salto = 0
 
         self.personaje = personaje
-        self.space = pymunk.Space()
-        self.space.gravity = (0, -1500)
         self.space.add(personaje.body,personaje.hide_box)
 
     def on_draw(self):
@@ -53,6 +70,8 @@ class Level(arcade.View):
         elif key == arcade.key.X:
             self.salto_presionado = False
         
+    def on_mouse_press(self, x, y, button, modifiers):
+        print(f"(self.pivot_x+{x},{y-10})")
 
     def key_press(self, key, modifiers):
         if key == arcade.key.LEFT:
@@ -105,7 +124,7 @@ class Level(arcade.View):
                 self.personaje.pisando = True
                 self.personaje.cambiar_frame_derecha(1)
             
-            if self.personaje.center_x<=700:
+            if self.personaje.center_x<=300:
                 self.personaje.mover_derecha()
             else:
                 self.fondo.center_x -=5
@@ -123,8 +142,21 @@ class Level(arcade.View):
                         # print("yes")
                         # self.personaje.position = (self.personaje.position.x, col.shape.body.position.y+20)
                     return True
-        return False
+        return False or self.check_colision_bottom_flotante()
 
+    def check_colision_bottom_flotante(self):
+        colisiones = self.space.shape_query(self.personaje.hide_box)
+        for col in colisiones:
+            if col.shape != self.personaje.hide_box:
+                if col.shape.body == self.piso_body_flotante:
+                    x,y = self.personaje.body.velocity
+                    if y < 0:
+                        self.personaje.body.velocity = (self.personaje.body.velocity.x, 1)
+                        col.shape.sensor = False
+                    elif y > 0:
+                        col.shape.sensor = True
+                    return True
+        return False
 
 
 
