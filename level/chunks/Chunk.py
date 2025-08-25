@@ -6,10 +6,13 @@ from entities.bloques import Bloques
 class Chunk():
     def __init__(self,pivot,personaje,space):
         self.pivot_x  = pivot
+        
         self.space = space
         self.personaje = personaje
         self.lista_bloques = []
         self.lista_plataformas = []
+        self.lista_plataformas_flotante = []
+        self.lista_paredes = []
         self.lista_gumbas = []
         self.lista_todo = []
 

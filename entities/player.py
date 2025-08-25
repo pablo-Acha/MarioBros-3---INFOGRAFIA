@@ -13,7 +13,7 @@ class Player(arcade.Sprite):
         self.pisando = False
         self.frame_i = 0; 
         self.frame_d = 0; 
-
+        self.tam = 1
         self.textures = [
             arcade.load_texture("assets/images/Mario/Mario base D.png"),
             arcade.load_texture("assets/images/Mario/Mario base 2 D.png"),
@@ -28,6 +28,8 @@ class Player(arcade.Sprite):
         self.body.elasticity = 0.0
         self.body.friction = 1.0
         # Shape principal
+        self.reducir_vel = 0
+        self.is_reducir = False
         self.hide_box = pymunk.Poly.create_box(self.body, size=(30, 50))
         # self.hide_box.elasticity = 0.2
         # self.hide_box.friction = 0.5
@@ -68,17 +70,24 @@ class Player(arcade.Sprite):
 
     def draw(self):         
         arcade.draw_sprite(self)
-        arcade.draw_polygon_outline([(self.center_x+15,self.center_y+25),(self.center_x-15,self.center_y+25)
-                                     ,(self.center_x-15,self.center_y-25),(self.center_x+15,self.center_y-25)],arcade.color.RED)    
         if not self.pisando:
             self.cambiar_frame_salto()
         
     def update(self, delta_time = 1 / 60):
         # if self.body.position.y <150:
         #     self.body.position = (self.body.position.x,150)
+        if self.is_reducir:
+            self.reducir_vel = self.body.velocity.x
+            const = 0
+            if self.direccion_d and self.body.velocity.x>0:
+                const = -5
+            if self.direccion_i and self.body.velocity.x<0:
+                const = 5
+            self.reducir_vel =self.reducir_vel + const
+            self.body.velocity = (self.reducir_vel,self.body.velocity.y)
         self.center_x = self.body.position.x
         self.center_y = self.body.position.y
-        print(self.body.velocity.y)
+        # print(self.body.velocity.y)
         if self.body.velocity.y < -900:
             self.body.velocity = (self.body.velocity.x,-900)
 
@@ -91,12 +100,15 @@ class Player(arcade.Sprite):
 
     def mover_izquierda(self):
         self.body.velocity = (-200, self.body.velocity.y)
+        self.is_reducir = False
 
     def mover_derecha(self):
         self.body.velocity = (200, self.body.velocity.y)
+        self.is_reducir = False
 
 
     def stop(self):
-        self.body.velocity = (0, self.body.velocity.y)
+        self.is_reducir = True
         
-
+    def rebote(self,x,y):
+        self.body.velocity =(x,y) 
