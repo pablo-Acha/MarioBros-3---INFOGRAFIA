@@ -6,8 +6,9 @@ Actualmente, el juego incluye solo una parte del primer nivel, donde el jugador 
 Aunque el juego no está completo, sirve como base para futuras expansiones, incluyendo más niveles, enemigos y power-ups.
 
 ## nombre y codigos de los integrantes
-Pablo Achá 77369
-Gonzalo Tezanos 
+Pablo Achá-77369
+
+Gonzalo Tezanos -  
 
 ## tiene que entrar a la carpeta del repositorio 
 cd MarioBros-3-Infografia-Acha-Tezanos
