@@ -1,16 +1,20 @@
+## Descripcion del proyecto
+Este proyecto es una recreación parcial de un juego al estilo Super Mario 3, desarrollada en Python utilizando Arcade para los gráficos, Pymunk para la física y Pyglet para los sonidos.
+
+Actualmente, el juego incluye solo una parte del primer nivel, donde el jugador puede moverse hacia la izquierda y derecha con las flechas del teclado, y saltar con la tecla X. El objetivo principal es explorar el nivel, interactuar con plataformas, con los bloques y eliminar enemigos.
+
+Aunque el juego no está completo, sirve como base para futuras expansiones, incluyendo más niveles, enemigos y power-ups.
+
+
 ## tiene que entrar a la carpeta del repositorio 
-cd MarioBros-3---INFOGRAFIA
+cd MarioBros-3-Infografia-Acha-Tezanos
 
-## descargar librerias uv SOLO UNA VEZ
-pip install uv
-uv venv
+## Requisitos
+- Python 3.8 o superior
+- Librerías de Python necesarias:
 
-## activar el entorno virtual cada vez que entres a la carpeta
-.\.venv\Scripts\activate
-
-## descargar las librerias SOLO UNA VEZ despues de activar el entorno virtual 
-uv add arcade
-uv add pymunk
+```bash
+pip install arcade pymunk pyglet
 
 
 ## iniciar el proyecto 
